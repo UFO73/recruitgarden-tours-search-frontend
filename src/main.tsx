@@ -4,7 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 
 import { App } from '@app/App';
 import { QueryProvider } from '@app/providers/QueryProvider';
-import '@styles/index.scss';
+import '@shared/styles/index.scss';
 
 const container = document.getElementById('root');
 

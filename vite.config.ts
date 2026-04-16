@@ -12,7 +12,10 @@ export default defineConfig({
     alias: {
       '@app': path.resolve(rootDirectory, 'src/app'),
       '@pages': path.resolve(rootDirectory, 'src/pages'),
-      '@styles': path.resolve(rootDirectory, 'src/styles')
+      '@features': path.resolve(rootDirectory, 'src/features'),
+      '@entities': path.resolve(rootDirectory, 'src/entities'),
+      '@shared': path.resolve(rootDirectory, 'src/shared'),
+      '@services': path.resolve(rootDirectory, 'src/services')
     }
   }
 });
