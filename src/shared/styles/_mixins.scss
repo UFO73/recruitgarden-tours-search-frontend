@@ -4,3 +4,14 @@
   width: min(100% - ($space-24 * 2), $content-width);
   margin: 0 auto;
 }
+
+@mixin focus-ring {
+  outline: 2px solid rgba($color-primary, 0.2);
+}
+
+@mixin surface {
+  background-color: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: $radius-12;
+  box-shadow: $shadow-sm;
+}

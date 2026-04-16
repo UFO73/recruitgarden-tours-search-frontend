@@ -1,0 +1,16 @@
+@use '@shared/styles/variables' as *;
+
+.state {
+  display: grid;
+  gap: $space-8;
+  text-align: center;
+}
+
+.title {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.description {
+  color: $color-text-muted;
+}

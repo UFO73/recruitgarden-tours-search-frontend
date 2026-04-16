@@ -1,0 +1,50 @@
+@use '@shared/styles/variables' as *;
+@use '@shared/styles/mixins' as *;
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-8;
+  min-height: 2.75rem;
+  padding: $space-12 $space-16;
+  border: 1px solid transparent;
+  border-radius: $radius-8;
+  font-weight: 600;
+  line-height: 1;
+  transition:
+    background-color $transition-base,
+    border-color $transition-base,
+    color $transition-base,
+    opacity $transition-base;
+  cursor: pointer;
+}
+
+.button:focus-visible {
+  @include focus-ring;
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.primary {
+  background-color: $color-primary;
+  color: #ffffff;
+}
+
+.primary:not(:disabled):hover {
+  background-color: $color-primary-hover;
+}
+
+.secondary {
+  background-color: $color-surface;
+  border-color: $color-border;
+  color: $color-text;
+}
+
+.secondary:not(:disabled):hover {
+  background-color: $color-surface-muted;
+  border-color: $color-border-strong;
+}

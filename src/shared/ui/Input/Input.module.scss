@@ -1,0 +1,35 @@
+@use '@shared/styles/variables' as *;
+@use '@shared/styles/mixins' as *;
+
+.input {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: $space-12 $space-16;
+  border: 1px solid $color-border;
+  border-radius: $radius-8;
+  background-color: $color-surface;
+  color: $color-text;
+  transition:
+    border-color $transition-base,
+    box-shadow $transition-base,
+    background-color $transition-base;
+}
+
+.input::placeholder {
+  color: $color-text-muted;
+}
+
+.input:hover {
+  border-color: $color-border-strong;
+}
+
+.input:focus-visible {
+  border-color: $color-primary;
+  @include focus-ring;
+}
+
+.input:disabled {
+  background-color: $color-surface-muted;
+  color: $color-text-muted;
+  cursor: not-allowed;
+}

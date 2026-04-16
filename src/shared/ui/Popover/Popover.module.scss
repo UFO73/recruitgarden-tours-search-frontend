@@ -1,0 +1,34 @@
+@use '@shared/styles/variables' as *;
+@use '@shared/styles/mixins' as *;
+
+.popover {
+  position: relative;
+  width: 100%;
+}
+
+.trigger {
+  width: 100%;
+}
+
+.content {
+  @include surface;
+
+  position: absolute;
+  top: calc(100% + $space-8);
+  z-index: 10;
+  min-width: 100%;
+  padding: $space-12;
+}
+
+.start {
+  left: 0;
+}
+
+.center {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.end {
+  right: 0;
+}
