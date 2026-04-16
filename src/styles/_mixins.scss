@@ -1,0 +1,6 @@
+@use './variables' as *;
+
+@mixin container {
+  width: min(100% - ($space-24 * 2), $content-width);
+  margin: 0 auto;
+}
