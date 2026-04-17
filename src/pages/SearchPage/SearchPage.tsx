@@ -1,3 +1,15 @@
+import { SearchForm, type SearchFormSubmitValue } from '@features/search-tours/ui';
+
+import styles from './SearchPage.module.scss';
+
 export function SearchPage() {
-  return <h1>Tours Search</h1>;
+  const handleSubmit = (value: SearchFormSubmitValue) => {
+    console.log('Search form submit:', value);
+  };
+
+  return (
+    <main className={styles.page}>
+      <SearchForm onSubmit={handleSubmit} />
+    </main>
+  );
 }

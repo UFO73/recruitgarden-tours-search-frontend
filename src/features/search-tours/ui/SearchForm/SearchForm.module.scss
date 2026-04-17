@@ -1,0 +1,33 @@
+@use '@shared/styles/variables' as *;
+@use '@shared/styles/mixins' as *;
+
+.formCard {
+  width: min(100%, 29rem);
+  padding: $space-32;
+}
+
+.header {
+  margin-bottom: $space-24;
+}
+
+.title {
+  margin: 0;
+  font-size: 2.125rem;
+  line-height: 1.1;
+  text-align: center;
+}
+
+.form {
+  display: grid;
+  gap: $space-20;
+}
+
+.submitButton {
+  width: 100%;
+}
+
+@media (max-width: 640px) {
+  .formCard {
+    padding: $space-24;
+  }
+}

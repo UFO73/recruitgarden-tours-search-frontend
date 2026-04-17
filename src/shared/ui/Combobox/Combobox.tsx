@@ -22,9 +22,11 @@ export interface ComboboxOption {
   description?: string;
   disabled?: boolean;
   iconName?: IconName;
+  imageAlt?: string;
+  imageSrc?: string;
 }
 
-export interface ComboboxProps extends Omit<
+export interface ComboboxProps<T extends ComboboxOption> extends Omit<
   InputProps,
   'className' | 'defaultValue' | 'onChange' | 'onSelect' | 'value'
 > {
@@ -32,19 +34,20 @@ export interface ComboboxProps extends Omit<
   contentClassName?: string;
   emptyMessage?: string;
   inputClassName?: string;
-  onSelect: (option: ComboboxOption) => void;
+  onSelect: (option: T) => void;
   onValueChange: (value: string) => void;
-  options: ComboboxOption[];
-  selectedOption?: ComboboxOption | null;
+  options: T[];
+  selectedOption?: T | null;
+  submitOnEnterSelection?: boolean;
   value: string;
 }
 
-function getFirstEnabledIndex(options: ComboboxOption[]) {
+function getFirstEnabledIndex<T extends ComboboxOption>(options: T[]) {
   return options.findIndex((option) => !option.disabled);
 }
 
-function getNextEnabledIndex(
-  options: ComboboxOption[],
+function getNextEnabledIndex<T extends ComboboxOption>(
+  options: T[],
   currentIndex: number,
   direction: 1 | -1
 ) {
@@ -67,7 +70,7 @@ function getNextEnabledIndex(
   return -1;
 }
 
-export function Combobox({
+export function Combobox<T extends ComboboxOption>({
   className,
   contentClassName,
   emptyMessage = 'No options found.',
@@ -80,10 +83,12 @@ export function Combobox({
   onValueChange,
   options,
   selectedOption = null,
+  submitOnEnterSelection = false,
   value,
   ...inputProps
-}: ComboboxProps) {
+}: ComboboxProps<T>) {
   const listboxId = useId();
+  const inputRef = useRef<HTMLInputElement>(null);
   const rootRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
@@ -140,7 +145,7 @@ export function Combobox({
     }
   };
 
-  const handleSelect = (option: ComboboxOption) => {
+  const handleSelect = (option: T) => {
     if (option.disabled) {
       return;
     }
@@ -218,10 +223,14 @@ export function Combobox({
 
         event.preventDefault();
 
-        const highlightedOption = options[highlightedIndex];
+        const highlightedOption: T | undefined = options[highlightedIndex];
 
         if (highlightedOption) {
           handleSelect(highlightedOption);
+
+          if (submitOnEnterSelection) {
+            inputRef.current?.form?.requestSubmit();
+          }
         }
 
         break;
@@ -257,6 +266,7 @@ export function Combobox({
               aria-controls={isOpen ? listboxId : undefined}
               aria-expanded={isOpen}
               className={inputClasses}
+              ref={inputRef}
               onBlur={handleInputBlur}
               onChange={handleInputChange}
               onClick={handleInputClick}
@@ -297,7 +307,15 @@ export function Combobox({
                   role="option"
                   type="button"
                 >
-                  {option.iconName ? (
+                  {option.imageSrc ? (
+                    <span className={styles.optionIcon}>
+                      <img
+                        alt={option.imageAlt ?? ''}
+                        className={styles.optionImage}
+                        src={option.imageSrc}
+                      />
+                    </span>
+                  ) : option.iconName ? (
                     <span className={styles.optionIcon}>
                       <Icon name={option.iconName} size={18} />
                     </span>
