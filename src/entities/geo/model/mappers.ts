@@ -1,6 +1,6 @@
 import type { RawGeoEntity, RawGeoResponse } from '@shared/api';
 
-import type { GeoOption } from './types';
+import type { CityGeoOption, GeoOption } from './types';
 
 function mapCountryGeoOption(
   rawEntity: Extract<RawGeoEntity, { type: 'country' }>
@@ -16,14 +16,24 @@ function mapCountryGeoOption(
   };
 }
 
-function mapCityGeoOption(rawEntity: Extract<RawGeoEntity, { type: 'city' }>): GeoOption {
+/** Same shape as `RawCity` from `@shared/api` (avoids import clash with `./types`). */
+interface RawCityRow {
+  id: number;
+  name: string;
+  countryId?: string;
+}
+
+function mapCityGeoOption(rawEntity: RawCityRow): CityGeoOption {
+  const countryId: string | undefined = rawEntity.countryId;
+
   return {
     id: String(rawEntity.id),
     name: rawEntity.name,
     kind: 'city',
     icon: 'city',
     label: rawEntity.name,
-    cityId: rawEntity.id
+    cityId: rawEntity.id,
+    countryId
   };
 }
 

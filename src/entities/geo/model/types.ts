@@ -16,10 +16,11 @@ export interface CountryGeoOption extends BaseGeoOption {
   flagUrl: string;
 }
 
-export interface CityGeoOption extends BaseGeoOption {
+export type CityGeoOption = BaseGeoOption & {
   kind: 'city';
   cityId: number;
-}
+  countryId?: string;
+};
 
 export interface HotelGeoOption extends BaseGeoOption {
   kind: 'hotel';

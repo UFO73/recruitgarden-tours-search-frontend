@@ -14,6 +14,7 @@ export interface RawCountry {
 export interface RawCity {
   id: number;
   name: string;
+  countryId?: string;
 }
 
 export interface RawHotel {

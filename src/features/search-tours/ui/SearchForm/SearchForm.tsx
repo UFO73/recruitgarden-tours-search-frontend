@@ -19,6 +19,7 @@ export interface SearchFormSubmitValue {
 }
 
 interface SearchFormOption extends ComboboxOption {
+  id: string;
   kind: SearchFormOptionKind;
   label: string;
   value: string;
@@ -29,6 +30,7 @@ interface SearchFormOption extends ComboboxOption {
 
 export interface SearchFormProps {
   className?: string;
+  isSubmitting?: boolean;
   onSubmit?: (value: SearchFormSubmitValue) => void;
 }
 
@@ -64,6 +66,7 @@ function mapGeoOption(option: GeoOption): SearchFormOption {
         label: option.label,
         value: option.name,
         cityId: option.cityId,
+        countryId: option.countryId,
         description: option.description,
         iconName: option.icon
       };
@@ -94,7 +97,50 @@ function getOpenMode(
   return value.trim().length > 0 ? 'search' : 'countries';
 }
 
-export function SearchForm({ className, onSubmit }: SearchFormProps) {
+function getCountryMatches(options: SearchFormOption[], value: string) {
+  const normalizedValue = value.trim().toLocaleLowerCase('uk-UA');
+
+  if (!normalizedValue) {
+    return [];
+  }
+
+  return options.filter((option) =>
+    option.label.toLocaleLowerCase('uk-UA').includes(normalizedValue)
+  );
+}
+
+function mergeKey(option: SearchFormOption): string {
+  if (option.kind === 'country' && option.countryId) {
+    return `country:${option.countryId}`;
+  }
+  if (option.kind === 'city' && option.cityId != null) {
+    return `city:${option.cityId}`;
+  }
+  if (option.kind === 'hotel' && option.hotelId != null) {
+    return `hotel:${option.hotelId}`;
+  }
+
+  return option.id;
+}
+
+function mergeOptions(
+  primaryOptions: SearchFormOption[],
+  secondaryOptions: SearchFormOption[]
+) {
+  const merged = new Map<string, SearchFormOption>();
+
+  [...primaryOptions, ...secondaryOptions].forEach((option) => {
+    merged.set(mergeKey(option), option);
+  });
+
+  return Array.from(merged.values());
+}
+
+export function SearchForm({
+  className,
+  isSubmitting = false,
+  onSubmit
+}: SearchFormProps) {
   const [value, setValue] = useState('');
   const [selectedOption, setSelectedOption] = useState<SearchFormOption | null>(null);
   const [optionsMode, setOptionsMode] = useState<SearchOptionsMode>('countries');
@@ -113,10 +159,14 @@ export function SearchForm({ className, onSubmit }: SearchFormProps) {
     () => (geoSearchQuery.data ?? []).map(mapGeoOption),
     [geoSearchQuery.data]
   );
-
-
+  const fallbackCountryOptions = useMemo(
+    () => getCountryMatches(countryOptions, value),
+    [countryOptions, value]
+  );
   const options: SearchFormOption[] =
-    optionsMode === 'countries' ? countryOptions : geoOptions;
+    optionsMode === 'countries'
+      ? countryOptions
+      : mergeOptions(fallbackCountryOptions, geoOptions);
 
 
   const handleValueChange = (nextValue: string) => {
@@ -156,6 +206,8 @@ export function SearchForm({ className, onSubmit }: SearchFormProps) {
     };
 
     onSubmit?.(submitValue);
+
+    console.log(submitValue);
   };
 
   const classes = [styles.formCard, className].filter(Boolean).join(' ');
@@ -183,7 +235,11 @@ export function SearchForm({ className, onSubmit }: SearchFormProps) {
           />
         </div>
 
-        <Button className={styles.submitButton} disabled={!selectedOption} type="submit">
+        <Button
+          className={styles.submitButton}
+          disabled={!selectedOption || isSubmitting}
+          type="submit"
+        >
           Знайти
         </Button>
       </form>
