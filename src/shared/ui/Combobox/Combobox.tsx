@@ -217,22 +217,23 @@ export function Combobox<T extends ComboboxOption>({
       }
 
       case 'Enter': {
-        if (!isOpen || highlightedIndex < 0) {
-          return;
-        }
+        if (isOpen && highlightedIndex >= 0) {
+          const highlightedOption: T | undefined = options[highlightedIndex];
 
-        event.preventDefault();
+          if (highlightedOption) {
+            event.preventDefault();
+            handleSelect(highlightedOption);
 
-        const highlightedOption: T | undefined = options[highlightedIndex];
+            if (submitOnEnterSelection) {
+              queueMicrotask(() => inputRef.current?.form?.requestSubmit());
+            }
 
-        if (highlightedOption) {
-          handleSelect(highlightedOption);
-
-          if (submitOnEnterSelection) {
-            inputRef.current?.form?.requestSubmit();
+            break;
           }
         }
 
+        event.preventDefault();
+        inputRef.current?.form?.requestSubmit();
         break;
       }
 

@@ -1,10 +1,15 @@
 @use '@shared/styles/variables' as *;
 
 .spinner {
+  box-sizing: border-box;
   display: inline-block;
+  flex-shrink: 0;
   border: 2px solid rgba($color-primary, 0.18);
   border-top-color: $color-primary;
   border-radius: 50%;
+  aspect-ratio: 1;
+  line-height: 0;
+  vertical-align: middle;
   animation: spin 0.7s linear infinite;
 }
 

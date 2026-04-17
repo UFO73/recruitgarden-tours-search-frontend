@@ -1,2 +1,7 @@
-export { mapTourCardModel, mapTourDetailsModel } from './mappers';
-export type { TourCardModel, TourDetailsModel, TourDetailsServiceModel } from './types';
+export { mapTourCardModel, mapTourCardModels, mapTourDetailsModel } from './mappers';
+export type {
+  MapTourCardModelsContext,
+  TourCardModel,
+  TourDetailsModel,
+  TourDetailsServiceModel
+} from './types';

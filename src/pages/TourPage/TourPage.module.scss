@@ -1,0 +1,8 @@
+@use '@shared/styles/variables' as *;
+
+.page {
+  box-sizing: border-box;
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: $space-24 $space-20;
+}

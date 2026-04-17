@@ -4,8 +4,8 @@ import styles from './SearchPage.module.scss';
 
 export function SearchPage() {
   return (
-    <main className={styles.page}>
+    <div className={styles.page}>
       <SearchToursSection />
-    </main>
+    </div>
   );
 }

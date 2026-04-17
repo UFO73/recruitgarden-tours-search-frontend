@@ -1,5 +1,11 @@
+import { mapHotels, type Hotel } from '@entities/hotel/model';
 import { mapPrices, type Price } from '@entities/price/model';
-import { ApiClientError, getSearchPrices, startSearchPrices } from '@shared/api';
+import {
+  ApiClientError,
+  getHotels,
+  getSearchPrices,
+  startSearchPrices
+} from '@shared/api';
 
 const SEARCH_RETRY_LIMIT = 2;
 
@@ -27,18 +33,42 @@ function sortPrices(prices: Price[]) {
   return [...prices].sort((left, right) => left.amount - right.amount);
 }
 
+export interface SearchToursResult {
+  prices: Price[];
+  hotelsById: Map<number, Hotel>;
+}
+
 export class SearchToursService {
   private readonly cache = new Map<string, Price[]>();
+  private readonly hotelsCache = new Map<string, Map<number, Hotel>>();
 
   getCached(countryId: string) {
     return this.cache.get(countryId);
   }
 
-  async search({ countryId }: SearchToursParams) {
+  async getHotelsByCountryId(countryId: string): Promise<Map<number, Hotel>> {
+    const cached = this.hotelsCache.get(countryId);
+
+    if (cached) {
+      return cached;
+    }
+
+    const raw = await getHotels(countryId);
+    const list = mapHotels(raw);
+    const map = new Map(list.map((hotel) => [hotel.id, hotel]));
+
+    this.hotelsCache.set(countryId, map);
+
+    return map;
+  }
+
+  async search({ countryId }: SearchToursParams): Promise<SearchToursResult> {
     const cachedPrices = this.getCached(countryId);
 
     if (cachedPrices) {
-      return cachedPrices;
+      const hotelsById = await this.getHotelsByCountryId(countryId);
+
+      return { prices: cachedPrices, hotelsById };
     }
 
     const { token, waitUntil } = await this.startSearchWithRetry(countryId);
@@ -47,7 +77,9 @@ export class SearchToursService {
 
     this.cache.set(countryId, sortedPrices);
 
-    return sortedPrices;
+    const hotelsById = await this.getHotelsByCountryId(countryId);
+
+    return { prices: sortedPrices, hotelsById };
   }
 
   private async startSearchWithRetry(countryId: string) {
@@ -78,11 +110,7 @@ export class SearchToursService {
 
         return mapPrices(response.prices);
       } catch (error) {
-        if (
-          error instanceof ApiClientError &&
-          error.status === 425 &&
-          error.waitUntil
-        ) {
+        if (error instanceof ApiClientError && error.status === 425 && error.waitUntil) {
           waitUntil = error.waitUntil;
           continue;
         }

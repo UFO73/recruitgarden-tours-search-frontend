@@ -168,7 +168,6 @@ export function SearchForm({
       ? countryOptions
       : mergeOptions(fallbackCountryOptions, geoOptions);
 
-
   const handleValueChange = (nextValue: string) => {
     setValue(nextValue);
 
@@ -206,8 +205,6 @@ export function SearchForm({
     };
 
     onSubmit?.(submitValue);
-
-    console.log(submitValue);
   };
 
   const classes = [styles.formCard, className].filter(Boolean).join(' ');

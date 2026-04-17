@@ -1,7 +1,8 @@
 export type ViewStatus = 'idle' | 'loading' | 'success' | 'empty' | 'error';
 
-export interface ViewState<T> {
-  status: ViewStatus;
-  data?: T;
-  errorMessage?: string;
-}
+export type ViewState<T> =
+  | { status: 'idle' }
+  | { status: 'loading' }
+  | { status: 'success'; data: T }
+  | { status: 'empty' }
+  | { status: 'error'; errorMessage?: string };
