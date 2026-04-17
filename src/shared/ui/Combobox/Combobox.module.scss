@@ -1,0 +1,93 @@
+@use '@shared/styles/variables' as *;
+@use '@shared/styles/mixins' as *;
+
+.combobox {
+  width: 100%;
+}
+
+.trigger {
+  position: relative;
+  width: 100%;
+}
+
+.input {
+  padding-right: 2.75rem;
+}
+
+.chevron {
+  position: absolute;
+  top: 50%;
+  right: $space-12;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: $color-text-muted;
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+.content {
+  padding: $space-8;
+}
+
+.list {
+  display: grid;
+  gap: $space-4;
+}
+
+.option {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: $space-12;
+  width: 100%;
+  padding: $space-12;
+  border: 0;
+  border-radius: $radius-8;
+  background: transparent;
+  color: $color-text;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color $transition-base;
+}
+
+.option:hover,
+.highlighted {
+  background-color: $color-surface-muted;
+}
+
+.selected {
+  color: $color-primary;
+}
+
+.disabled {
+  color: $color-text-muted;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.optionIcon,
+.optionCheck {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.optionContent {
+  display: grid;
+  gap: $space-4;
+}
+
+.optionLabel {
+  font-weight: 500;
+}
+
+.optionDescription,
+.empty {
+  color: $color-text-muted;
+  font-size: 0.875rem;
+}
+
+.empty {
+  padding: $space-12;
+}
