@@ -1,0 +1,36 @@
+@use '@shared/styles/variables' as *;
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: $space-8;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: $space-8;
+  margin: 0;
+  font-size: 0.9375rem;
+  color: $color-text-muted;
+}
+
+.icon {
+  flex-shrink: 0;
+  color: $color-text-muted;
+}
+
+.flag {
+  flex-shrink: 0;
+  border-radius: 2px;
+  object-fit: cover;
+}
+
+.inline {
+  display: flex;
+  align-items: center;
+  gap: $space-8;
+  margin: 0;
+  font-size: 0.9375rem;
+  color: $color-text-muted;
+}

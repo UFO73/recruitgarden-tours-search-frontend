@@ -6,6 +6,12 @@
   text-align: center;
 }
 
+.iconWrap {
+  display: flex;
+  justify-content: center;
+  color: $color-text-muted;
+}
+
 .title {
   font-size: 1.125rem;
   font-weight: 600;

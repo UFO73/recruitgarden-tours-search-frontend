@@ -9,7 +9,7 @@ export function AppRouter() {
     <Routes>
       <Route element={<MainLayout />}>
         <Route path="/" element={<SearchPage />} />
-        <Route path="/tour/:priceId/hotel/:hotelId" element={<TourPage />} />
+        <Route path="/tour/:priceId/:hotelId" element={<TourPage />} />
       </Route>
     </Routes>
   );

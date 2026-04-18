@@ -34,6 +34,7 @@ function sortPrices(prices: Price[]) {
 }
 
 export interface SearchToursResult {
+  countryId: string;
   prices: Price[];
   hotelsById: Map<number, Hotel>;
 }
@@ -68,7 +69,7 @@ export class SearchToursService {
     if (cachedPrices) {
       const hotelsById = await this.getHotelsByCountryId(countryId);
 
-      return { prices: cachedPrices, hotelsById };
+      return { countryId, prices: cachedPrices, hotelsById };
     }
 
     const { token, waitUntil } = await this.startSearchWithRetry(countryId);
@@ -79,7 +80,7 @@ export class SearchToursService {
 
     const hotelsById = await this.getHotelsByCountryId(countryId);
 
-    return { prices: sortedPrices, hotelsById };
+    return { countryId, prices: sortedPrices, hotelsById };
   }
 
   private async startSearchWithRetry(countryId: string) {

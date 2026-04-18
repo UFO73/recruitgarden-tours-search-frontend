@@ -57,7 +57,11 @@
 }
 
 .selected {
-  color: $color-primary;
+  color: $color-text;
+
+  .optionLabel {
+    font-weight: 600;
+  }
 }
 
 .disabled {
@@ -71,6 +75,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  color: $color-text-muted;
 }
 
 .optionImage {

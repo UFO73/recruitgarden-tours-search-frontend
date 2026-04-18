@@ -1,4 +1,4 @@
-import { Card, EmptyState, ErrorState, Spinner } from '@shared/ui';
+import { Card, EmptyState, ErrorState, Icon, Spinner } from '@shared/ui';
 import type { ViewState } from '@shared/lib';
 
 import styles from './SearchStatusPanel.module.scss';
@@ -26,6 +26,7 @@ export function SearchStatusPanel({ viewState }: SearchStatusPanelProps) {
     return (
       <ErrorState
         description={viewState.errorMessage}
+        icon={<Icon name="alert" size={32} />}
         title="Не вдалося виконати пошук"
       />
     );
@@ -35,6 +36,7 @@ export function SearchStatusPanel({ viewState }: SearchStatusPanelProps) {
     return (
       <EmptyState
         description="Спробуйте змінити напрямок пошуку."
+        icon={<Icon name="search" size={32} />}
         title="За вашим запитом турів не знайдено"
       />
     );

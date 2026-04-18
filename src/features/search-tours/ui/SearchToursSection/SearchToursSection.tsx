@@ -1,8 +1,6 @@
-import { useMemo } from 'react';
-
-import { useCountriesQuery } from '@entities/country/model';
-import { mapTourCardModels } from '@entities/tour/model';
-import { useTourSearch } from '@features/search-tours/model';
+import type { TourCardModel } from '@entities/tour/model';
+import { useTourSearch } from '@features/search-tours/model/useTourSearch';
+import { useTourSearchCards } from '@features/search-tours/model/useTourSearchCards';
 
 import type { SearchFormSubmitValue } from '../SearchForm';
 import { SearchForm } from '../SearchForm';
@@ -13,22 +11,7 @@ import styles from './SearchToursSection.module.scss';
 
 export function SearchToursSection() {
   const { startSearch, viewState } = useTourSearch();
-  const countriesQuery = useCountriesQuery();
-
-  const tourCards = useMemo(() => {
-    if (viewState.status !== 'success') {
-      return [];
-    }
-
-    const { countryId, prices, hotelsById } = viewState.data;
-    const country = countriesQuery.data?.find((item) => item.id === countryId);
-
-    return mapTourCardModels(prices, hotelsById, {
-      countryId,
-      countryName: country?.name ?? '',
-      countryFlagUrl: country?.flagUrl
-    });
-  }, [countriesQuery.data, viewState]);
+  const tourCards: TourCardModel[] = useTourSearchCards(viewState);
 
   const handleSubmit = (value: SearchFormSubmitValue) => {
     void startSearch({ countryId: value.countryId });

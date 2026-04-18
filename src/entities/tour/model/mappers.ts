@@ -1,6 +1,6 @@
 import type { Hotel } from '@entities/hotel/model';
 import type { Price } from '@entities/price/model';
-import { formatCurrency, formatDate, formatDateRange } from '@shared/lib';
+import { formatDate, formatDateRange } from '@shared/lib';
 
 import type {
   MapTourCardModelsContext,
@@ -11,10 +11,15 @@ import type {
 
 const hotelServiceLabels: Record<string, string> = {
   wifi: 'Wi-Fi',
-  aquapark: 'Aquapark',
-  tennis_court: 'Tennis court',
-  laundry: 'Laundry',
-  parking: 'Parking'
+  aquapark: 'Аквапарк',
+  tennis_court: 'Тенісний корт',
+  laundry: 'Пральня',
+  parking: 'Паркування',
+  pool: 'Басейн',
+  swimming_pool: 'Басейн',
+  meal: 'Харчування',
+  food: 'Харчування',
+  dining: 'Харчування'
 };
 
 function formatLocationLabel(hotel: Hotel) {
@@ -100,7 +105,7 @@ export function mapTourDetailsModel(hotel: Hotel, price: Price): TourDetailsMode
     description: hotel.description ?? '',
     services: mapTourDetailsServices(hotel),
     periodLabel: formatDateRange(price.startDate, price.endDate),
-    priceLabel: formatCurrency(price.amount, price.currency),
+    priceLabel: formatTourCardPrice(price.amount),
     imageUrl: hotel.imageUrl
   };
 }
