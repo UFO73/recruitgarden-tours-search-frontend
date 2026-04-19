@@ -1,11 +1,11 @@
 import type { RawGeoEntity, RawGeoResponse } from '@shared/api';
+import type { RawCity } from '@shared/api/types';
 
-import type {
-  CityGeoOption,
-  CountryGeoOption,
-  GeoOption,
-  HotelGeoOption
-} from './types';
+import type { CityGeoOption, CountryGeoOption, GeoOption, HotelGeoOption } from './types';
+
+function optionalApiString(value: unknown): string | undefined {
+  return typeof value === 'string' ? value : undefined;
+}
 
 function mapCountryGeoOption(
   rawEntity: Extract<RawGeoEntity, { type: 'country' }>
@@ -21,11 +21,8 @@ function mapCountryGeoOption(
   };
 }
 
-function mapCityGeoOption(
-  rawEntity: Extract<RawGeoEntity, { type: 'city' }>
-): CityGeoOption {
-  const countryId =
-    typeof rawEntity.countryId === 'string' ? rawEntity.countryId : undefined;
+function mapCityGeoOption(rawEntity: RawCity & { type: 'city' }): CityGeoOption {
+  const countryId = optionalApiString(rawEntity.countryId);
 
   return {
     id: String(rawEntity.id),

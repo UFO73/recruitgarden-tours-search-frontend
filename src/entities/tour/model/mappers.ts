@@ -1,6 +1,6 @@
 import type { Hotel } from '@entities/hotel/model';
 import type { Price } from '@entities/price/model';
-import { formatDate, formatDateRange } from '@shared/lib';
+import { formatCurrency, formatDate, formatDateRange } from '@shared/lib';
 
 import type {
   MapTourCardModelsContext,
@@ -14,12 +14,7 @@ const hotelServiceLabels: Record<string, string> = {
   aquapark: 'Аквапарк',
   tennis_court: 'Тенісний корт',
   laundry: 'Пральня',
-  parking: 'Паркування',
-  pool: 'Басейн',
-  swimming_pool: 'Басейн',
-  meal: 'Харчування',
-  food: 'Харчування',
-  dining: 'Харчування'
+  parking: 'Паркування'
 };
 
 function formatLocationLabel(hotel: Hotel) {
@@ -36,14 +31,6 @@ function mapTourDetailsServices(hotel: Hotel): TourDetailsServiceModel[] {
     label: hotelServiceLabels[service.key] ?? service.key.replaceAll('_', ' '),
     value: service.value
   }));
-}
-
-function formatTourCardPrice(amount: number): string {
-  const formatted = new Intl.NumberFormat('uk-UA', {
-    maximumFractionDigits: 0
-  }).format(amount);
-
-  return `${formatted} грн`;
 }
 
 function createFallbackHotel(
@@ -91,7 +78,7 @@ export function mapTourCardModel(hotel: Hotel, price: Price): TourCardModel {
     hotelName: hotel.name,
     locationLabel: formatLocationLabel(hotel),
     startDateLabel: formatDate(price.startDate),
-    priceLabel: formatTourCardPrice(price.amount),
+    priceLabel: formatCurrency(price.amount, price.currency),
     imageUrl: hotel.imageUrl
   };
 }
@@ -105,7 +92,7 @@ export function mapTourDetailsModel(hotel: Hotel, price: Price): TourDetailsMode
     description: hotel.description ?? '',
     services: mapTourDetailsServices(hotel),
     periodLabel: formatDateRange(price.startDate, price.endDate),
-    priceLabel: formatTourCardPrice(price.amount),
+    priceLabel: formatCurrency(price.amount, price.currency),
     imageUrl: hotel.imageUrl
   };
 }

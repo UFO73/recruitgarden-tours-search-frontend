@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { useCountriesQuery } from '@entities/country/model';
 import type { TourCardModel } from '@entities/tour/model';
 import type { ViewState } from '@shared/lib';
-import { buildSearchResultsCards } from '@services/search-tours';
+import { buildSearchResultsCards } from '@services/search-tours/buildSearchResultsCards';
 
 import type { TourSearchSuccessData } from './types';
 

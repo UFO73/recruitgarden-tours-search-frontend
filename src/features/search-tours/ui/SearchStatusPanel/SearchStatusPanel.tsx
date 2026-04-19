@@ -1,14 +1,19 @@
-import { Card, EmptyState, ErrorState, Icon, Spinner } from '@shared/ui';
+import type { TourSearchSuccessData } from '@features/search-tours/model/types';
 import type { ViewState } from '@shared/lib';
+import { Card, EmptyState, ErrorState, Icon, Spinner } from '@shared/ui';
 
 import styles from './SearchStatusPanel.module.scss';
 
 interface SearchStatusPanelProps {
-  viewState: ViewState<unknown>;
+  isSearching?: boolean;
+  viewState: ViewState<TourSearchSuccessData>;
 }
 
-export function SearchStatusPanel({ viewState }: SearchStatusPanelProps) {
-  if (viewState.status === 'loading') {
+export function SearchStatusPanel({
+  isSearching = false,
+  viewState
+}: SearchStatusPanelProps) {
+  if (isSearching || viewState.status === 'loading') {
     return (
       <Card className={styles.loadingCard}>
         <Spinner />

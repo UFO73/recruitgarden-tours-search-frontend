@@ -52,12 +52,13 @@ export function TourPage() {
   const priceId = priceIdParam ? decodeURIComponent(priceIdParam) : '';
   const hotelIdNum = hotelIdParam !== undefined ? Number(hotelIdParam) : NaN;
   const hotelIdValid = Number.isFinite(hotelIdNum) && hotelIdNum >= 0;
+  const paramsInvalid = !priceId || !hotelIdValid;
 
   const priceQuery = usePriceDetailsQuery(priceId || undefined, {
-    enabled: Boolean(priceId)
+    enabled: !paramsInvalid
   });
   const hotelQuery = useHotelDetailsQuery(hotelIdValid ? hotelIdNum : undefined, {
-    enabled: hotelIdValid
+    enabled: !paramsInvalid
   });
   const countriesQuery = useCountriesQuery();
   const countryList = useMemo<Country[]>(
@@ -74,8 +75,7 @@ export function TourPage() {
     [countryList, hotel?.countryId]
   );
 
-  const isLoading = priceQuery.isPending || hotelQuery.isPending;
-  const paramsInvalid = !priceId || !hotelIdValid;
+  const isLoading = !paramsInvalid && (priceQuery.isPending || hotelQuery.isPending);
   const queriesFailed = priceQuery.isError || hotelQuery.isError;
   const readyButNoDetails =
     priceQuery.isSuccess && hotelQuery.isSuccess && details === null;
@@ -195,9 +195,6 @@ export function TourPage() {
 
         <div className={styles.footer}>
           <p className={styles.price}>{details.priceLabel}</p>
-          <Link className={styles.cta} to="/">
-            Відкрити ціну
-          </Link>
         </div>
       </article>
 

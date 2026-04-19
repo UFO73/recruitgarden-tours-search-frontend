@@ -225,7 +225,7 @@ export function SearchForm({
             onSelect={handleSelect}
             onValueChange={handleValueChange}
             options={options}
-            placeholder="Choose a country, city, or hotel"
+            placeholder="Оберіть країну, місто або готель"
             selectedOption={selectedOption}
             submitOnEnterSelection
             value={value}

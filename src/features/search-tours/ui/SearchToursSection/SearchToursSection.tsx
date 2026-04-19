@@ -10,8 +10,10 @@ import { SearchStatusPanel } from '../SearchStatusPanel';
 import styles from './SearchToursSection.module.scss';
 
 export function SearchToursSection() {
-  const { startSearch, viewState } = useTourSearch();
+  const { isRestarting, isSearching, startSearch, viewState } = useTourSearch();
   const tourCards: TourCardModel[] = useTourSearchCards(viewState);
+  const isSubmitting = Boolean(isRestarting);
+  const isPanelSearching = Boolean(isSearching);
 
   const handleSubmit = (value: SearchFormSubmitValue) => {
     void startSearch({ countryId: value.countryId });
@@ -19,8 +21,8 @@ export function SearchToursSection() {
 
   return (
     <section className={styles.section}>
-      <SearchForm isSubmitting={viewState.status === 'loading'} onSubmit={handleSubmit} />
-      <SearchStatusPanel viewState={viewState} />
+      <SearchForm isSubmitting={isSubmitting} onSubmit={handleSubmit} />
+      <SearchStatusPanel isSearching={isPanelSearching} viewState={viewState} />
       {tourCards.length > 0 ? <SearchResults cards={tourCards} /> : null}
     </section>
   );

@@ -4,11 +4,14 @@ import { ApiClientError } from '@shared/api';
 import type { ViewState } from '@shared/lib';
 import { SearchToursService } from '@services/search-tours';
 
-import type {
-  TourSearchParams,
-  TourSearchSuccessData,
-  UseTourSearchResult
-} from './types';
+import type { TourSearchParams, TourSearchSuccessData } from './types';
+
+export interface UseTourSearchResult {
+  startSearch: (params: TourSearchParams) => Promise<void>;
+  viewState: ViewState<TourSearchSuccessData>;
+  isRestarting: boolean;
+  isSearching: boolean;
+}
 
 function getSearchErrorMessage(error: unknown) {
   if (error instanceof ApiClientError) {
@@ -29,12 +32,14 @@ function createViewState(data: TourSearchSuccessData): ViewState<TourSearchSucce
 export function useTourSearch(): UseTourSearchResult {
   const serviceRef = useRef<SearchToursService>(new SearchToursService());
   const requestIdRef = useRef(0);
+  const [isRestarting, setIsRestarting] = useState<boolean>(false);
   const [viewState, setViewState] = useState<ViewState<TourSearchSuccessData>>({
     status: 'idle'
   });
 
   const startSearch = useCallback(async ({ countryId }: TourSearchParams) => {
     const requestId = requestIdRef.current + 1;
+    const shouldRestart = serviceRef.current.hasActiveSearch();
 
     requestIdRef.current = requestId;
 
@@ -47,32 +52,11 @@ export function useTourSearch(): UseTourSearchResult {
       return;
     }
 
-    const cachedPrices = serviceRef.current.getCached(countryId);
-
-    if (cachedPrices) {
-      try {
-        const hotelsById = await serviceRef.current.getHotelsByCountryId(countryId);
-
-        if (requestId !== requestIdRef.current) {
-          return;
-        }
-
-        setViewState(createViewState({ countryId, prices: cachedPrices, hotelsById }));
-      } catch (error) {
-        if (requestId !== requestIdRef.current) {
-          return;
-        }
-
-        setViewState({
-          status: 'error',
-          errorMessage: getSearchErrorMessage(error)
-        });
-      }
-
-      return;
+    if (shouldRestart) {
+      setIsRestarting(true);
+    } else {
+      setViewState({ status: 'loading' });
     }
-
-    setViewState({ status: 'loading' });
 
     try {
       const { prices, hotelsById } = await serviceRef.current.search({ countryId });
@@ -91,11 +75,19 @@ export function useTourSearch(): UseTourSearchResult {
         status: 'error',
         errorMessage: getSearchErrorMessage(error)
       });
+    } finally {
+      if (requestId === requestIdRef.current) {
+        setIsRestarting(false);
+      }
     }
   }, []);
 
+  const isSearching = viewState.status === 'loading' || isRestarting;
+
   return {
     startSearch,
-    viewState
+    viewState,
+    isRestarting,
+    isSearching
   };
 }
