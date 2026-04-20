@@ -85,12 +85,4 @@ Checked behavior:
 - `aria-expanded` changes when the dropdown opens or closes;
 - `aria-controls` links the input with the listbox;
 - `aria-activedescendant` follows keyboard highlight;
-- keyboard supports `ArrowDown`, `ArrowUp`, `Enter`, and `Escape`.
-
-## Remaining Improvements
-
-Apart from commit history, the project would be stronger with these final touches:
-
-1. Add lightweight UI/component documentation for reusable primitives: `Input`, `Popover`, `Combobox`, `Button`, `Card`.
-2. Add error-state coverage for hotel loading on result aggregation, not only for the search request itself.
-3. Add a small deployed demo link or a clear note that local run is the only supported verification path.
+- keyboard supports `ArrowDown`, `ArrowUp`, `Enter`, and `Escape`

@@ -1,10 +1,8 @@
 import { Link } from 'react-router-dom';
 
 import type { TourCardModel } from '@entities/tour/model';
+import { TourHotelMedia, TourLocationMeta } from '@entities/tour/ui';
 import { Icon } from '@shared/ui';
-
-import { TourHotelMedia } from '../TourHotelMedia';
-import { TourLocationMeta } from '../TourLocationMeta';
 
 import styles from './TourCard.module.scss';
 
